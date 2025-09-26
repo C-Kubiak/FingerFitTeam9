@@ -1750,6 +1750,8 @@ MonoBehaviour:
   - Unity makes game development accessible
   - Typing games help improve hand recovery
   - FingerFit is designed for older adults
+  flashDuration: 0.12
+  flashHexColor: '#FF0000FF'
 --- !u!1 &1614623166
 GameObject:
   m_ObjectHideFlags: 0

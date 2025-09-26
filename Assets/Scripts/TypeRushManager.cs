@@ -31,11 +31,7 @@ public class TypeRushManager : MonoBehaviour
     private float startTime;
     private bool timerRunning = false;
 
-
-    // I'm implementing a flashing red letter effect for incorrect inputs
-    private bool _suppressOnChange = false;  // Prevent the OnInputChanged from immediately overwriting the "Incorrect" message
-    private bool _isFlashing = false;        // Prevent overlapping flashes
-    [SerializeField] private float flashDuration = 0.12f; // Flash duration in seconds
+    private int lastInputLength = 0;
 
     void Start()
     {
@@ -54,10 +50,10 @@ public class TypeRushManager : MonoBehaviour
         phraseText.text = currentPhrase;
         inputField.text = "";
         feedbackText.text = "";
+        lastInputLength = 0;
         currentIndex++;
     }
-
-    void OnInputChanged(string userInput)
+  void OnInputChanged(string userInput)
     {
         if (!timerRunning)
         {
@@ -65,35 +61,60 @@ public class TypeRushManager : MonoBehaviour
             startTime = Time.time;
         }
 
-        totalKeystrokes++;
+        // Count keystrokes, but mistakes only count when typing forward
+        if (userInput.Length > lastInputLength)
+        {
+            totalKeystrokes++;
+        }
 
         if (userInput.Length > currentPhrase.Length)
         {
             mistakeCount++;
             feedbackText.text = "<color=red>Too many characters!</color>";
+            lastInputLength = userInput.Length;
+            UpdateStats();
             return;
         }
 
+        // Build colored phrase
+        int firstErrorIndex = -1;
         for (int i = 0; i < userInput.Length; i++)
         {
-            if (userInput[i] == currentPhrase[i])
-                feedbackText.text = "<color=green>Correct so far...</color>";
-            else
+            if (userInput[i] != currentPhrase[i])
             {
-                feedbackText.text = "<color=red>Incorrect!</color>";
-                mistakeCount++;
-
-                // Auto-deletes incorrect characters typed
-                // The goal here is avoiding excessive mistake counts due to long wrong inputs, I found that I racked up a lot of mistakes when accidentally missing a single letter 
-                // I took inspiration from the game typeracer as they incorporate a similar mechanic
-                userInput = userInput.Remove(i, 1);
-                inputField.text = userInput;
-                inputField.caretPosition = i;
-
-
-                return;
+                if (firstErrorIndex == -1)
+                {
+                    firstErrorIndex = i;
+                }
             }
         }
+
+        // Apply coloring
+        string coloredPhrase = "";
+        if (firstErrorIndex == -1)
+        {
+            // All correct so far message
+            coloredPhrase = $"<color=green>{currentPhrase.Substring(0, userInput.Length)}</color>" +
+                            currentPhrase.Substring(userInput.Length);
+            feedbackText.text = "<color=green>Correct so far...</color>";
+        }
+        else
+        {
+            // Correct part up to error
+            coloredPhrase = $"<color=green>{currentPhrase.Substring(0, firstErrorIndex)}</color>" +
+                            $"<color=red>{currentPhrase.Substring(firstErrorIndex, userInput.Length - firstErrorIndex)}</color>" +
+                            currentPhrase.Substring(userInput.Length);
+
+            feedbackText.text = "<color=red>Incorrect!</color>";
+
+            // Only count mistakes when typing forward
+            if (userInput.Length > lastInputLength)
+            {
+                mistakeCount++;
+            }
+        }
+
+        phraseText.text = coloredPhrase;
 
         if (userInput == currentPhrase)
         {
@@ -102,6 +123,7 @@ public class TypeRushManager : MonoBehaviour
             LoadNextPhrase();
         }
 
+        lastInputLength = userInput.Length;
         UpdateStats();
     }
 
