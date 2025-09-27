@@ -35,6 +35,16 @@ public class SettingsManager : MonoBehaviour
     public string highContrastTextHex = "#FFFFFF";
     public string highContrastButtonHex = "#FFD700";
 
+
+    [Header("UI Object Settings (for reset values)")]
+    public GameObject volumeSliderGO;
+    public GameObject fontSizeSliderGO;
+    public GameObject contrastToggleGO;
+
+    private Slider volumeSlider;
+    private Slider fontSizeSlider;
+    private Toggle contrastToggle;
+
     void Awake()
     {
         if (Instance == null)
@@ -47,6 +57,11 @@ public class SettingsManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+        // Cache the Slider components from the GameObjects
+        volumeSlider = volumeSliderGO.GetComponent<Slider>();
+        fontSizeSlider = fontSizeSliderGO.GetComponent<Slider>();
+        contrastToggle = contrastToggleGO.GetComponent<Toggle>();
+
 
         LoadAndApplyAll();
     }
@@ -94,6 +109,13 @@ public void SetFontSize(float size)
         PlayerPrefs.SetFloat(KEY_FONT, defaultFontSize);
         PlayerPrefs.SetInt(KEY_CONTRAST, defaultHighContrast ? 1 : 0);
         PlayerPrefs.SetFloat(KEY_VOLUME, defaultVolume);
+
+        // Refresh UI Sliders
+        volumeSlider.value = SettingsManager.Instance.defaultVolume;
+        fontSizeSlider.value = SettingsManager.Instance.defaultFontSize;
+        contrastToggle.isOn = SettingsManager.Instance.defaultHighContrast;
+
+
         LoadAndApplyAll();
     }
     #endregion

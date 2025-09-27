@@ -18,11 +18,24 @@ public class SettingsPanelController : MonoBehaviour
     {
         if (settingsPanel != null) settingsPanel.SetActive(false);
     }
-    public void OpenPanel()
+    public void TogglePanel()
     {
         if (settingsPanel == null) return;
-        settingsPanel.SetActive(true);
-        StartCoroutine(FadeIn());
+
+        //Toggle panel active state
+        if (!settingsPanel.activeSelf)
+        {
+            settingsPanel.SetActive(true);
+            StartCoroutine(FadeIn());
+        }
+
+        //Toggle panel inactive state
+        else if (settingsPanel.activeSelf)
+        {
+            StartCoroutine(FadeOut());
+        }
+
+
     }
 
     public void ClosePanel()

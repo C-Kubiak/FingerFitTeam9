@@ -388,6 +388,9 @@ MonoBehaviour:
   highContrastBgHex: '#000000'
   highContrastTextHex: '#FFFFFF'
   highContrastButtonHex: '#FFD700'
+  volumeSliderGO: {fileID: 1096448971}
+  fontSizeSliderGO: {fileID: 1094878114}
+  contrastToggleGO: {fileID: 1029981040}
 --- !u!1 &91648745
 GameObject:
   m_ObjectHideFlags: 0
@@ -3355,7 +3358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 35186322}
         m_TargetAssemblyTypeName: SettingsPanelController, Assembly-CSharp
-        m_MethodName: OpenPanel
+        m_MethodName: TogglePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
