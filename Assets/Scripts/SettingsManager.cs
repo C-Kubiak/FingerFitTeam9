@@ -85,8 +85,8 @@ public class SettingsManager : MonoBehaviour
         LoadAndApplyAll();
     }
 
-#region Public API for UI bindings
-public void SetFontSize(float size)
+    #region Public API for UI bindings
+    public void SetFontSize(float size)
     {
         PlayerPrefs.SetFloat(KEY_FONT, size);
         ApplyFontSize(size);
@@ -137,6 +137,11 @@ public void SetFontSize(float size)
         foreach (var t in textTargets)
         {
             if (t == null) continue;
+
+            // NEW: Skip texts with IgnoreFontScaling
+            if (t.GetComponent<IgnoreFontScaling>() != null)
+                continue;
+
             t.fontSize = fontSize;
         }
         Canvas.ForceUpdateCanvases();
