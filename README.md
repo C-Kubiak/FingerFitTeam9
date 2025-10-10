@@ -22,7 +22,7 @@ How to Commit & Push Changes
 5. Push to the repository
    $ git push origin main
 
-   ⚠️ Important: Always run
+   Important: Always run
    $ git pull origin main
    before pushing, to make sure your local copy is up to date and avoid merge conflicts.
 
