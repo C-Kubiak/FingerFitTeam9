@@ -1,7 +1,4 @@
 # FingerFit
-==============================
-FingerFit Team Repo - Git Workflow
-==============================
 
 How to Commit & Push Changes
 ----------------------------
