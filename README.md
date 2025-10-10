@@ -1,12 +1,39 @@
 # FingerFit
+==============================
+FingerFit Team Repo - Git Workflow
+==============================
 
+How to Commit & Push Changes
+----------------------------
 
+1. Open a terminal or VS Code terminal in the project folder
+   - Make sure you are inside the project’s root directory (where the .git folder is located).
 
+2. Check your current branch
+   $ git status
 
+   - If you are not on the main branch (e.g., on dev or a feature branch), switch or create one as needed:
+     $ git checkout main        # switch to main
+     $ git pull origin main     # get the latest updates
 
+3. Stage your changes
+   $ git add .
 
+4. Commit with a clear message
+   $ git commit -m "Describe what you changed (e.g., added new UI scene)"
 
+5. Push to the repository
+   $ git push origin main
 
+   ⚠️ Important: Always run
+   $ git pull origin main
+   before pushing, to make sure your local copy is up to date and avoid merge conflicts.
+
+Notes
+-----
+
+- Missing folders like Library, Logs, and Obj are **normal** for Unity projects and are excluded via .gitignore.
+- Unity should regenerate these folders automatically when opening the project in Unity.
 
 
 
