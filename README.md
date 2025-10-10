@@ -39,8 +39,4 @@
 
 
 ## \- Known Issues -
-
-
-
-* After entering TypeRush from the main menu, and returning to the main menu, the TypeRush button is unable to load the minigame a second time.
-* Red highlighted text for incorrect words does not account for spaces, a semi-transparent highlighted box will likely work better for more precise locating typing errors.
+KNOWN ISSUES 10/8: Playing a game, then exiting to main menu, the button will not take you to your destination. The same is true for the settings panel. (potential cause: event listeners staying active after scene is unloaded) Accuracy in type rush is only updated after a phrase is completed. User design lacking, increasing font size can lead to text overfilling buttons.
