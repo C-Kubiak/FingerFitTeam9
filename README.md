@@ -61,7 +61,7 @@ Notes
 
 * Added UI asset package (GUIPack-Clean&Minimalist), updated main menu to be cleaner
 * Added background to main menu (asset package: Simple Nature Package)
-* Tried fixing settings not persisting
+* Tried fixing settings not persisting, issue still remains
 * Resolved scenes failing to load upon entering and exiting
 
 
