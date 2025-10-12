@@ -101,3 +101,4 @@ InitTestScene*.unity*
 # Local data (user profiles, test stats, etc.)
 /Assets/Data/
 *.json
+.vscode/
