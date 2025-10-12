@@ -74,3 +74,4 @@ Notes
 
 * SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene
 * User Design Lacking in mini games
+* Lacking data storage
