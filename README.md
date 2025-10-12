@@ -59,8 +59,8 @@ Notes
 
 #### 10/12/25
 
-* Added UI asset package, updated main menu to be cleaner
-* Added background to main menu (asset package)
+* Added UI asset package (GUIPack-Clean&Minimalist), updated main menu to be cleaner
+* Added background to main menu (asset package: Simple Nature Package)
 * Tried fixing settings not persisting
 * Resolved scenes failing to load upon entering and exiting
 
