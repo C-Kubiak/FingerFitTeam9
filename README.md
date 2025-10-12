@@ -32,10 +32,7 @@ Notes
 - Missing folders like Library, Logs, and Obj are **normal** for Unity projects and are excluded via .gitignore.
 - Unity should regenerate these folders automatically when opening the project in Unity.
 
-## Known Issues (10/12)
 
-* SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene
-* User Design Lacking in mini games
 
 ## \- Changelog -
 
@@ -74,4 +71,6 @@ Notes
 
 
 ## \- Known Issues -
-KNOWN ISSUES 10/8: Playing a game, then exiting to main menu, the button will not take you to your destination. The same is true for the settings panel. (potential cause: event listeners staying active after scene is unloaded) Accuracy in type rush is only updated after a phrase is completed. User design lacking, increasing font size can lead to text overfilling buttons.
+
+* SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene
+* User Design Lacking in mini games
