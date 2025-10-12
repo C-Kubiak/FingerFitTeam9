@@ -32,7 +32,10 @@ Notes
 - Missing folders like Library, Logs, and Obj are **normal** for Unity projects and are excluded via .gitignore.
 - Unity should regenerate these folders automatically when opening the project in Unity.
 
+## Known Issues (10/12)
 
+* SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene
+* User Design Lacking in mini games
 
 ## \- Changelog -
 
@@ -55,6 +58,14 @@ Notes
 * Reworked TypeRushManager script to highlight correct text in green and incorrect text in red as user types. Additionally the user is no longer charged with mistakes for backspaces.
 
   * Reason: Easier for users to find where mistakes are made, and mistakes don't count as double anymore. This change is more in line with Typeracer and other typing games.
+ 
+
+#### 10/12/25
+
+* Added UI asset package, updated main menu to be cleaner
+* Added background to main menu (asset package)
+* Tried fixing settings not persisting
+* Resolved scenes failing to load upon entering and exiting
 
 
 
