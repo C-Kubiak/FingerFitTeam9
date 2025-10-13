@@ -1,4 +1,5 @@
 # FingerFit
+Unity Version: 2022.3.62f2 (previously 2022.3.62f1, but updated due to security issues)
 
 How to Commit & Push Changes
 ----------------------------
