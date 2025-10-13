@@ -79,3 +79,5 @@ Notes
 * SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene (moving away from a settings panel, trying a whole scene for settings)
 * User Design Lacking in mini games
 * Lacking data storage
+* Sequence Spark shows <\ALPHA> in phrase box after making mistake
+* Type Rush doesn't have a GAME OVER popup when reaching mistake count
