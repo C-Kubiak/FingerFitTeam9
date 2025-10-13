@@ -11,6 +11,7 @@ public class KeyCatchManager : MonoBehaviour
     public TMP_Text reactionText;     // shows avg reaction time
     public TMP_InputField inputField; // input box
     public Button playAgainButton;    // play again button
+    public Button startButton;        // starts the game
 
     [Header("Game Rules")]
     public float gameDuration = 45f;
@@ -30,15 +31,25 @@ public class KeyCatchManager : MonoBehaviour
     private float totalReactionTime = 0f;
     private int successfulReactions = 0;
 
-    void Start()
-    {
-        playAgainButton.onClick.AddListener(StartGame);
+void Start()
+{
+    playAgainButton.onClick.AddListener(StartGame);
+    startButton.onClick.AddListener(StartGame); // Start button now starts the game
 
-        inputField.onValueChanged.AddListener(OnInputChanged);
+    inputField.onValueChanged.AddListener(OnInputChanged);
+    inputField.characterLimit = 1;
 
-        inputField.characterLimit = 1; // only one char allowed
-        StartGame();
-    }
+    // Don't start immediately
+    gameActive = false;
+    keyPromptText.text = "Press Start to Begin!";
+    timerText.text = "Time: " + Mathf.CeilToInt(gameDuration);
+    reactionText.text = "Average Reaction: 0.00s";
+
+    startButton.gameObject.SetActive(true);      // show Start button
+    playAgainButton.gameObject.SetActive(false); // hide Play Again until game over
+}
+
+
 
     void Update()
     {
@@ -48,30 +59,38 @@ public class KeyCatchManager : MonoBehaviour
         timeRemaining -= Time.deltaTime;
         timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
 
-        if (timeRemaining <= 0f)
-        {
-            gameActive = false;
-            keyPromptText.text = "";
-            reactionText.text = $"Final Avg Reaction: {(successfulReactions > 0 ? (totalReactionTime / successfulReactions).ToString("F2") : "N/A")}s";
-        }
+if (timeRemaining <= 0f)
+{
+    gameActive = false;
+    keyPromptText.text = "";
+    reactionText.text = $"Final Avg Reaction: {(successfulReactions > 0 ? (totalReactionTime / successfulReactions).ToString("F2") : "N/A")}s";
+
+    playAgainButton.gameObject.SetActive(true);
+}
+
     }
 
-    void StartGame()
-    {
-        score = 0;
-        totalReactionTime = 0f;
-        successfulReactions = 0;
+void StartGame()
+{
+    score = 0;
+    totalReactionTime = 0f;
+    successfulReactions = 0;
 
-        scoreText.text = "Score: 0";
-        reactionText.text = "Average Reaction: 0.00s";
+    scoreText.text = "Score: 0";
+    reactionText.text = "Average Reaction: 0.00s";
 
-        timeRemaining = gameDuration;
-        gameActive = true;
+    timeRemaining = gameDuration;
 
-        inputField.text = "";
-        inputField.ActivateInputField();
-        ShowNewKey();
-    }
+    gameActive = true;             // make sure this is set first
+    startButton.gameObject.SetActive(false); // hide Start button
+
+    inputField.text = "";
+    inputField.ActivateInputField();
+
+    ShowNewKey();                  // now gameActive is true, timer will tick
+}
+
+
 
     private string lastKey = null; // store previous key
 

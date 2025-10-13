@@ -8,7 +8,6 @@ public class TypeRushManager : MonoBehaviour
     [Header("UI References")]
     public TMP_Text phraseText;
     public TMP_InputField inputField;
-    public TMP_Text feedbackText;
     public TMP_Text wpmText;
     public TMP_Text accuracyText;
     public TMP_Text mistakesText;
@@ -16,105 +15,104 @@ public class TypeRushManager : MonoBehaviour
     [Header("Phrases")]
     [SerializeField, TextArea(2, 5)]
     private List<string> phrases = new List<string>() {
-        "The quick brown fox jumps over the lazy dog",
-        "Typing games help improve hand recovery",
-        "Unity makes game development accessible",
-        "FingerFit is designed for older adults",
-        "Practice makes perfect when typing every day",
-        "Small consistent steps lead to big results",
-        "Healthy hands mean more freedom in daily life",
-        "Good posture helps with comfortable typing",
-        "Never give up on learning new skills",
-        "Patience and practice improve coordination",
-        "Typing trains both the brain and the hands",
-        "Every letter typed builds muscle memory",
-        "Speed comes naturally after accuracy",
-        "Focus on progress, not perfection",
-        "Typing is a useful everyday skill",
-        "Stay calm and keep practicing typing",
-        "The journey is just as important as the goal",
-        "Typing exercises help strengthen fingers",
-        "Balance speed with accuracy for success",
-        "Typing with rhythm can improve flow",
-        // ... add up to 100+ phrases ...
-        "Always look ahead to the next challenge",
-        "Practice typing with joy and patience",
-        "Train your hands like an athlete trains muscles",
-        "Typing improves both memory and focus",
-        "Recovery takes time but effort pays off",
-        "Each keystroke brings you closer to mastery",
-        "Stay positive and consistent with training",
-        "Typing is a gateway to digital communication",
-        "Fast fingers make computer use easier",
-        "Strength grows when effort is repeated",
-        "Every challenge is a chance to grow",
-        "Practice typing in short focused sessions",
-        "Typing strengthens hand-eye coordination",
-        "Repetition builds familiarity and skill",
-        "Accuracy first, speed second, mastery third",
-        "Typing helps sharpen mental agility",
-        "The best way to type better is to type more",
-        "Typing is both a skill and an art",
-        "Celebrate small improvements each session",
-        "Typing well helps daily digital activities",
-        "Strong hands support independent living",
-        "Confidence grows with steady progress",
-        "Typing connects thought to action quickly",
-        "Fine motor skills improve with careful typing",
-        "Typing challenges keep the brain active",
-        "Recovery through games makes progress fun",
-        "Typing practice helps with real world tasks",
-        "Every phrase typed is progress made",
-        "Typing fluency makes tasks less frustrating",
-        "Keyboard skills are useful at any age",
-        "Typing supports memory and concentration",
-        "Fast accurate typing saves time online",
-        "Typing builds rhythm in thought and action",
-        "Hand rehabilitation can be enjoyable",
-        "Typing makes communication faster and easier",
-        "Consistent training leads to steady progress",
-        "Typing correctly prevents bad habits",
-        "Typing fluency reduces hand strain",
-        "Typing challenges are great brain workouts",
-        "Accuracy today becomes speed tomorrow",
-        "Typing is useful for writing and messaging",
-        "Games make rehabilitation engaging",
-        "Typing encourages focus and patience",
-        "Practice regularly for lasting results",
-        "Typing fluency supports everyday independence",
-        "Typing helps improve reaction speed",
-        "Correct typing form prevents mistakes",
-        "Typing builds dexterity and control",
-        "Typing trains both mind and body",
-        "Fast typing comes with steady practice",
-        "Typing can be both fun and therapeutic",
-        "A clear mind leads to better typing",
-        "Typing often improves everyday confidence",
-        "Consistency is the key to improvement",
-        "Typing helps with learning new skills",
-        "Typing challenges the memory as well",
-        "Typing fluency leads to less frustration",
-        "Typing connects ideas to the screen quickly",
-        "Typing fluency is rewarding to achieve",
-        "Games make skill building enjoyable",
-        "Typing practice sharpens focus",
-        "Typing strengthens the small muscles in hands",
-        "Typing challenges reaction and recall",
-        "Improved typing supports digital literacy",
-        "Typing fluency increases independence",
-        "Typing builds confidence with technology",
-        "Practice typing to improve accuracy",
-        "Typing helps keep the mind engaged",
-        "Typing fluency helps in daily communication",
-        "Typing practice strengthens neural pathways",
-        "Typing fluency supports better hand recovery",
-        "Typing helps build lifelong digital skills",
-        "Typing often can boost confidence",
-        "Typing fluency is useful for all ages",
-        "Typing exercises are good for the brain",
-        "Typing fluency builds independence",
-        "Typing strengthens memory and reflexes",
-        "Typing is a valuable everyday ability"
+        "the quick brown fox jumps over the lazy dog",
+        "typing games help improve hand recovery",
+        "unity makes game development accessible",
+        "fingerfit is designed for older adults",
+        "practice makes perfect when typing every day",
+        "small consistent steps lead to big results",
+        "healthy hands mean more freedom in daily life",
+        "good posture helps with comfortable typing",
+        "never give up on learning new skills",
+        "patience and practice improve coordination",
+        "typing trains both the brain and the hands",
+        "every letter typed builds muscle memory",
+        "speed comes naturally after accuracy",
+        "focus on progress, not perfection",
+        "typing is a useful everyday skill",
+        "stay calm and keep practicing typing",
+        "the journey is just as important as the goal",
+        "typing exercises help strengthen fingers",
+        "balance speed with accuracy for success",
+        "typing with rhythm can improve flow",
+        "always look ahead to the next challenge",
+        "practice typing with joy and patience",
+        "train your hands like an athlete trains muscles",
+        "typing improves both memory and focus",
+        "recovery takes time but effort pays off",
+        "each keystroke brings you closer to mastery",
+        "stay positive and consistent with training",
+        "typing is a gateway to digital communication",
+        "fast fingers make computer use easier",
+        "strength grows when effort is repeated",
+        "every challenge is a chance to grow",
+        "practice typing in short focused sessions",
+        "typing strengthens hand-eye coordination",
+        "repetition builds familiarity and skill",
+        "accuracy first, speed second, mastery third",
+        "typing helps sharpen mental agility",
+        "the best way to type better is to type more",
+        "typing is both a skill and an art",
+        "celebrate small improvements each session",
+        "typing well helps daily digital activities",
+        "strong hands support independent living",
+        "confidence grows with steady progress",
+        "typing connects thought to action quickly",
+        "fine motor skills improve with careful typing",
+        "typing challenges keep the brain active",
+        "recovery through games makes progress fun",
+        "typing practice helps with real world tasks",
+        "every phrase typed is progress made",
+        "typing fluency makes tasks less frustrating",
+        "keyboard skills are useful at any age",
+        "typing supports memory and concentration",
+        "fast accurate typing saves time online",
+        "typing builds rhythm in thought and action",
+        "hand rehabilitation can be enjoyable",
+        "typing makes communication faster and easier",
+        "consistent training leads to steady progress",
+        "typing correctly prevents bad habits",
+        "typing fluency reduces hand strain",
+        "typing challenges are great brain workouts",
+        "accuracy today becomes speed tomorrow",
+        "typing is useful for writing and messaging",
+        "games make rehabilitation engaging",
+        "typing encourages focus and patience",
+        "practice regularly for lasting results",
+        "typing fluency supports everyday independence",
+        "typing helps improve reaction speed",
+        "correct typing form prevents mistakes",
+        "typing builds dexterity and control",
+        "typing trains both mind and body",
+        "fast typing comes with steady practice",
+        "typing can be both fun and therapeutic",
+        "a clear mind leads to better typing",
+        "typing often improves everyday confidence",
+        "consistency is the key to improvement",
+        "typing helps with learning new skills",
+        "typing challenges the memory as well",
+        "typing fluency leads to less frustration",
+        "typing connects ideas to the screen quickly",
+        "typing fluency is rewarding to achieve",
+        "games make skill building enjoyable",
+        "typing practice sharpens focus",
+        "typing strengthens the small muscles in hands",
+        "typing challenges reaction and recall",
+        "improved typing supports digital literacy",
+        "typing fluency increases independence",
+        "typing builds confidence with technology",
+        "practice typing to improve accuracy",
+        "typing helps keep the mind engaged",
+        "typing fluency helps in daily communication",
+        "typing practice strengthens neural pathways",
+        "typing fluency supports better hand recovery",
+        "typing helps build lifelong digital skills",
+        "typing often can boost confidence",
+        "typing fluency is useful for all ages",
+        "typing exercises are good for the brain",
+        "typing fluency builds independence",
+        "typing strengthens memory and reflexes",
+        "typing is a valuable everyday ability"
     };
 
     [Header("Game Rules")]
@@ -163,76 +161,90 @@ public class TypeRushManager : MonoBehaviour
 
         phraseText.text = currentPhrase;
         inputField.text = "";
-        feedbackText.text = "";
         lastInputLength = 0;
     }
 
-    void OnInputChanged(string userInput)
+private int lastCorrectKeystrokes = 0;
+
+void OnInputChanged(string userInput)
+{
+    if (gameOver) return;
+
+    if (!timerRunning)
     {
-        if (gameOver) return;
-
-        if (!timerRunning)
-        {
-            timerRunning = true;
-            startTime = Time.time;
-        }
-
-        if (userInput.Length > lastInputLength)
-        {
-            totalKeystrokes++;
-        }
-
-        if (userInput.Length > currentPhrase.Length)
-        {
-            AddMistake("<color=red>Too many characters!</color>");
-            lastInputLength = userInput.Length;
-            UpdateStats();
-            return;
-        }
-
-        int firstErrorIndex = -1;
-        for (int i = 0; i < userInput.Length; i++)
-        {
-            if (userInput[i] != currentPhrase[i] && firstErrorIndex == -1)
-                firstErrorIndex = i;
-        }
-
-        string coloredPhrase;
-        if (firstErrorIndex == -1)
-        {
-            coloredPhrase = $"<color=green>{currentPhrase.Substring(0, userInput.Length)}</color>" +
-                            currentPhrase.Substring(userInput.Length);
-            feedbackText.text = "<color=green>Correct so far...</color>";
-        }
-        else
-        {
-            coloredPhrase = $"<color=green>{currentPhrase.Substring(0, firstErrorIndex)}</color>" +
-                            $"<color=red>{currentPhrase.Substring(firstErrorIndex, userInput.Length - firstErrorIndex)}</color>" +
-                            currentPhrase.Substring(userInput.Length);
-
-            feedbackText.text = "<color=red>Incorrect!</color>";
-
-            if (userInput.Length > lastInputLength)
-                AddMistake("<color=red>Incorrect!</color>");
-        }
-
-        phraseText.text = coloredPhrase;
-
-        if (userInput == currentPhrase)
-        {
-            correctKeystrokes += userInput.Length;
-            inputField.text = "";
-            LoadNextPhrase();
-        }
-
-        lastInputLength = userInput.Length;
-        UpdateStats();
+        timerRunning = true;
+        startTime = Time.time;
     }
+
+    // Increment total keystrokes only if a new character was typed
+    if (userInput.Length > lastInputLength)
+    {
+        totalKeystrokes++;
+    }
+
+    // Calculate correct keystrokes for this input
+    int correctThisInput = 0;
+    for (int i = 0; i < userInput.Length; i++)
+    {
+        if (i < currentPhrase.Length && userInput[i] == currentPhrase[i])
+            correctThisInput++;
+    }
+
+    // Increment correctKeystrokes by the new correct characters typed
+    correctKeystrokes += Mathf.Max(0, correctThisInput - lastCorrectKeystrokes);
+    lastCorrectKeystrokes = correctThisInput;
+
+    // Check for mistakes beyond phrase length
+    if (userInput.Length > currentPhrase.Length)
+    {
+        AddMistake("<color=red>Too many characters!</color>");
+    }
+
+    // Highlight phrase text
+    int firstErrorIndex = -1;
+    for (int i = 0; i < userInput.Length; i++)
+    {
+        if (i >= currentPhrase.Length || userInput[i] != currentPhrase[i])
+        {
+            firstErrorIndex = i;
+            break;
+        }
+    }
+
+    string coloredPhrase;
+    if (firstErrorIndex == -1)
+    {
+        coloredPhrase = $"<color=green>{currentPhrase.Substring(0, userInput.Length)}</color>" +
+                        currentPhrase.Substring(userInput.Length);
+    }
+    else
+    {
+        coloredPhrase = $"<color=green>{currentPhrase.Substring(0, firstErrorIndex)}</color>" +
+                        $"<color=red>{currentPhrase.Substring(firstErrorIndex, Mathf.Min(userInput.Length, currentPhrase.Length) - firstErrorIndex)}</color>" +
+                        currentPhrase.Substring(Mathf.Min(userInput.Length, currentPhrase.Length));
+        
+        // Count a mistake if user typed a wrong character
+        if (userInput.Length > lastInputLength)
+            AddMistake("<color=red>Incorrect!</color>");
+    }
+
+    phraseText.text = coloredPhrase;
+
+    // Check if the phrase is complete
+    if (userInput == currentPhrase)
+    {
+        inputField.text = "";
+        lastCorrectKeystrokes = 0; // reset for next phrase
+        LoadNextPhrase();
+    }
+
+    lastInputLength = userInput.Length;
+    UpdateStats();
+}
 
     void AddMistake(string message)
     {
         mistakeCount++;
-        feedbackText.text = message;
         if (mistakeCount >= mistakeLimit)
         {
             EndGame();
@@ -240,42 +252,39 @@ public class TypeRushManager : MonoBehaviour
     }
 
     void UpdateStats()
-    {
-        float elapsedMinutes = (Time.time - startTime) / 60f;
-        int wordsTyped = correctKeystrokes / 5;
-        int wpm = elapsedMinutes > 0 ? (int)(wordsTyped / elapsedMinutes) : 0;
+{
+    // Time in minutes since the game started
+    float elapsedMinutes = timerRunning ? (Time.time - startTime) / 60f : 0f;
 
-        float accuracy = (totalKeystrokes > 0)
-            ? (correctKeystrokes / (float)totalKeystrokes) * 100f
-            : 0f;
+    // Words typed so far (5 chars = 1 word)
+    int wordsTyped = correctKeystrokes / 5;
+    int wpm = elapsedMinutes > 0 ? Mathf.RoundToInt(wordsTyped / elapsedMinutes) : 0;
 
-        // Update WPM and Mistakes
-        wpmText.text = $"WPM: {wpm}";
-        mistakesText.text = $"Mistakes: {mistakeCount}/{mistakeLimit}";
+    // Accuracy calculation
+    float accuracy = totalKeystrokes > 0 
+        ? (correctKeystrokes / (float)totalKeystrokes) * 100f 
+        : 100f; // default 100% if nothing typed yet
 
-        // Accuracy with color feedback
-        accuracyText.text = "Accuracy: " + accuracy.ToString("F1") + "%";
+    // Update UI texts
+    wpmText.text = $"WPM: {wpm}";
+    mistakesText.text = $"Mistakes: {mistakeCount}/{mistakeLimit}";
+    accuracyText.text = $"Accuracy: {accuracy:F1}%";
 
-        if (accuracy >= 90f)
-        {
-            accuracyText.color = Color.green;   // great accuracy
-        }
-        else if (accuracy >= 70f)
-        {
-            accuracyText.color = Color.yellow;  // decent accuracy
-        }
-        else
-        {
-            accuracyText.color = Color.red;     // needs improvement
-        }
-    }
+    // Color feedback
+    if (accuracy >= 90f)
+        accuracyText.color = Color.green;   // great accuracy
+    else if (accuracy >= 70f)
+        accuracyText.color = Color.yellow;  // decent accuracy
+    else
+        accuracyText.color = Color.red;     // needs improvement
+}
+
 
 
     void EndGame()
     {
         gameOver = true;
         inputField.interactable = false;
-        feedbackText.text = "<color=red>Game Over! Too many mistakes.</color>";
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);

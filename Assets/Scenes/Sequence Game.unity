@@ -1314,7 +1314,7 @@ MonoBehaviour:
   maxRounds: 0
   reflashOnFailure: 1
   showInputBullets: 1
-  allowedCharacters: asdfjkl;ghqwertyuiopzxcvbnm
+  allowedCharacters: asdfjklghqwertyuiopzxcvbnm
   forceLowercase: 1
   flashDuration: 0.45
   interLetterDelay: 0.2

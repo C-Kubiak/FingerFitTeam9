@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sequence Game.unity
     guid: d3af4d7ab058b06428d394b8f22e188e
+  - enabled: 1
+    path: Assets/Scenes/SettingsScene.unity
+    guid: 3e5e789a59a1ff341afff8bc99ec7803
   m_configObjects: {}
