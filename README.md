@@ -66,7 +66,7 @@ Notes
 
 #### 10/13/25
 
-* Incorporated new asset package into Key Catch, Type Rush, and Main Menu
+* Incorporated new asset package into Key Catch, Type Rush, Sequence Spark, and Main Menu
 * Created a settings scene to use rather than the panel on the main menu (not completed)
 * Testing a background in Type Rush/Main Menu
 
