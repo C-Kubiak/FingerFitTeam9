@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,11 +15,12 @@ public class SequenceSparkManager : MonoBehaviour
     public TMP_Text currentStreakText;
     public TMP_Text longestStreakText;
     public TMP_Text mistakesText;
-    public GameObject gameOverPanel;
+    public Button startButton;
+    public Button playAgainButton;
 
     [Header("Game Rules")]
     public int mistakeLimit = 3;
-    public int maxRounds = 0;              // 0 = endless
+    public int maxRounds = 0; // 0 = endless
     public bool reflashOnFailure = true;
     public bool showInputBullets = true;
 
@@ -39,7 +39,6 @@ public class SequenceSparkManager : MonoBehaviour
 
     private readonly List<char> sequence = new List<char>();
     private int roundNumber = 0;
-
     private int totalScore = 0;
     private int currentStreak = 0;
     private int longestStreak = 0;
@@ -47,24 +46,33 @@ public class SequenceSparkManager : MonoBehaviour
 
     private bool gameOver = false;
     private bool showingSequence = false;
-
     private string sanitizedInput = "";
     private int lastInputLength = 0;
 
     private void Start()
     {
         inputField.onValueChanged.AddListener(OnInputChanged);
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+
+        if (playAgainButton != null) playAgainButton.gameObject.SetActive(false);
+
+        if (startButton != null) startButton.onClick.AddListener(OnStartPressed);
+        if (playAgainButton != null) playAgainButton.onClick.AddListener(Restart);
 
         int fontSize = PlayerPrefs.GetInt("FontSize", 48);
         if (phraseText) phraseText.fontSize = fontSize;
 
+        inputField.interactable = false;
+        if (phraseText) phraseText.text = "Press Start to Begin!";
+    }
+
+    private void OnStartPressed()
+    {
+        if (startButton != null) startButton.gameObject.SetActive(false);
         BeginFirstRun();
     }
 
     private void BeginFirstRun()
     {
-        // reset all runtime values
         sequence.Clear();
         roundNumber = 0;
         totalScore = 0;
@@ -76,8 +84,7 @@ public class SequenceSparkManager : MonoBehaviour
         gameOver = false;
         showingSequence = false;
 
-        // reset UI
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (playAgainButton != null) playAgainButton.gameObject.SetActive(false);
         if (phraseText) phraseText.text = "";
         if (feedbackText) feedbackText.text = "";
         if (inputField)
@@ -95,7 +102,6 @@ public class SequenceSparkManager : MonoBehaviour
         if (gameOver) yield break;
 
         phraseText.text = "";
-
         roundNumber++;
         AppendRandomLetter();
 
@@ -106,20 +112,13 @@ public class SequenceSparkManager : MonoBehaviour
         if (feedbackText) feedbackText.text = $"<color=#87CEFA>Round {roundNumber}</color>";
         yield return new WaitForSeconds(roundDelay);
 
-        // Flash sequence
         yield return StartCoroutine(FlashSequence());
 
-        // Ready for input
         showingSequence = false;
-
-        
-        
-
         inputField.interactable = true;
         inputField.ActivateInputField();
 
-        // Initialize Prompt
-        phraseText.text = "Type the sequence" + "\n\n" + BuildBulletPlaceholders("", sequence.Count);
+        phraseText.text = "Type the sequence\n\n" + BuildBulletPlaceholders("", sequence.Count);
     }
 
     private void AppendRandomLetter()
@@ -136,8 +135,7 @@ public class SequenceSparkManager : MonoBehaviour
     {
         showingSequence = true;
         inputField.interactable = false;
-
-        if (phraseText) phraseText.text = "";
+        phraseText.text = "";
 
         yield return new WaitForSeconds(0.15f);
 
@@ -146,21 +144,17 @@ public class SequenceSparkManager : MonoBehaviour
             char c = sequence[i];
             string shown = forceLowercase ? c.ToString().ToLowerInvariant() : c.ToString();
 
-            // Flash a single letter
-            if (phraseText) phraseText.text = $"<size=140%><b>{shown}</b></size>";
+            phraseText.text = $"<size=140%><b>{shown}</b></size>";
             yield return new WaitForSeconds(flashDuration);
 
-            // Gap between letters
-            if (phraseText) phraseText.text = "";
+            phraseText.text = "";
             yield return new WaitForSeconds(interLetterDelay);
         }
     }
 
     private void OnInputChanged(string rawInput)
     {
-        if (inputField.interactable == false) return;
-
-        if (gameOver || showingSequence)
+        if (!inputField.interactable || gameOver || showingSequence)
         {
             phraseText.text = "";
             return;
@@ -168,10 +162,8 @@ public class SequenceSparkManager : MonoBehaviour
 
         sanitizedInput = forceLowercase ? rawInput.ToLowerInvariant() : rawInput;
 
-        if (showInputBullets && phraseText)
-        {
-            phraseText.text = "Type the sequence" + "\n\n" + BuildBulletPlaceholders(sanitizedInput, sequence.Count);
-        }
+        if (showInputBullets)
+            phraseText.text = "Type the sequence\n\n" + BuildBulletPlaceholders(sanitizedInput, sequence.Count);
 
         if (sanitizedInput.Length > sequence.Count)
         {
@@ -188,11 +180,8 @@ public class SequenceSparkManager : MonoBehaviour
             }
         }
 
-        // completed full input correctly
         if (sanitizedInput.Length == sequence.Count)
-        {
             HandleRoundSuccess();
-        }
 
         lastInputLength = sanitizedInput.Length;
     }
@@ -207,18 +196,13 @@ public class SequenceSparkManager : MonoBehaviour
             if (i > 0) sb.Append(' ');
 
             if (i < typedInput.Length)
-            {
                 sb.Append(typedInput[i]);
-            }
             else
-            {
-                sb.Append("<alpha=#60>•");
-            }
+                sb.Append("<alpha=#60>â€¢");
         }
 
         return sb.ToString();
     }
-
 
     private void HandleRoundSuccess()
     {
@@ -231,17 +215,14 @@ public class SequenceSparkManager : MonoBehaviour
 
         UpdateStatsUI();
 
-        // Win condition if capped rounds
         if (maxRounds > 0 && roundNumber >= maxRounds)
         {
-            if (feedbackText) feedbackText.text = "<color=#00FF7F>Sequence Spark Complete!</color>";
+            feedbackText.text = "<color=#00FF7F>Sequence Spark Complete!</color>";
             EndGame();
             return;
         }
 
-        if (feedbackText) feedbackText.text = "<color=#00FF7F>Nice! +" + points + " pts</color>";
-
-        // progress to next round
+        feedbackText.text = "<color=#00FF7F>Nice! +" + points + " pts</color>";
         StartCoroutine(BeginNextRound());
     }
 
@@ -251,11 +232,11 @@ public class SequenceSparkManager : MonoBehaviour
         currentStreak = 0;
         UpdateStatsUI();
 
-        if (feedbackText) feedbackText.text = reason;
+        feedbackText.text = reason;
 
         if (mistakeCount >= mistakeLimit)
         {
-            if (feedbackText) feedbackText.text = "<color=red>Game Over! Too many mistakes.</color>";
+            phraseText.text = "<color=red><b>GAME OVER</b></color>";
             EndGame();
             return;
         }
@@ -264,13 +245,10 @@ public class SequenceSparkManager : MonoBehaviour
         lastInputLength = 0;
 
         if (reflashOnFailure)
-        {
             StartCoroutine(ReflashSameSequence());
-        }
         else
         {
-            // If not reflashing, prompt to try again
-            if (phraseText) phraseText.text = "<alpha=#60>Try again…</alpha>";
+            phraseText.text = "<alpha=#60>Try againâ€¦</alpha>";
             inputField.ActivateInputField();
         }
     }
@@ -279,10 +257,10 @@ public class SequenceSparkManager : MonoBehaviour
     {
         inputField.interactable = false;
         yield return new WaitForSeconds(0.6f);
-        if (feedbackText) feedbackText.text = "<color=#FFD700>Watch closely…</color>";
+        feedbackText.text = "<color=#FFD700>Watch closelyâ€¦</color>";
         yield return StartCoroutine(FlashSequence());
         showingSequence = false;
-        if (phraseText) phraseText.text = "<alpha=#60>Type the sequence…</alpha>";
+        phraseText.text = "<alpha=#60>Type the sequenceâ€¦</alpha>";
         inputField.interactable = true;
         inputField.ActivateInputField();
     }
@@ -300,11 +278,14 @@ public class SequenceSparkManager : MonoBehaviour
         gameOver = true;
         showingSequence = false;
         inputField.interactable = false;
-        if (gameOverPanel != null) gameOverPanel.SetActive(true);
+
+        // only show Play Again button
+        if (playAgainButton != null) playAgainButton.gameObject.SetActive(true);
     }
+
     public void Restart()
     {
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (playAgainButton != null) playAgainButton.gameObject.SetActive(false);
         BeginFirstRun();
     }
 }

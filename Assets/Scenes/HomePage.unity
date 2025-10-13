@@ -2569,6 +2569,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SettingsManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7008160919731992465, guid: 45acbf5ee9e124b42ad717e086bfe61a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2787,6 +2791,10 @@ PrefabInstance:
     - target: {fileID: 6849897775240260224, guid: cd4e41f6e3bc849a3ae83013397d9480, type: 3}
       propertyPath: m_Name
       value: SettingsButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849897775240260224, guid: cd4e41f6e3bc849a3ae83013397d9480, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9132426931702492185, guid: cd4e41f6e3bc849a3ae83013397d9480, type: 3}
       propertyPath: m_text

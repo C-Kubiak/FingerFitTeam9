@@ -11,6 +11,8 @@ public class TypeRushManager : MonoBehaviour
     public TMP_Text wpmText;
     public TMP_Text accuracyText;
     public TMP_Text mistakesText;
+    public Button startButton;
+    public Button playAgainButton;
 
     [Header("Phrases")]
     [SerializeField, TextArea(2, 5)]
@@ -116,8 +118,7 @@ public class TypeRushManager : MonoBehaviour
     };
 
     [Header("Game Rules")]
-    public int mistakeLimit = 10;   // max mistakes allowed before game ends
-    public GameObject gameOverPanel; // assign a UI panel in Inspector
+    public int mistakeLimit = 10;
 
     private string currentPhrase;
     private HashSet<int> usedIndices = new HashSet<int>();
@@ -130,17 +131,54 @@ public class TypeRushManager : MonoBehaviour
     private bool gameOver = false;
 
     private int lastInputLength = 0;
+    private int lastCorrectKeystrokes = 0;
 
     void Start()
     {
-        LoadNextPhrase();
+        // Setup listeners
         inputField.onValueChanged.AddListener(OnInputChanged);
 
+        // Buttons
+        if (startButton != null)
+            startButton.onClick.AddListener(OnStartPressed);
+
+        if (playAgainButton != null)
+            playAgainButton.onClick.AddListener(RestartGame);
+
+        // UI setup
         int fontSize = PlayerPrefs.GetInt("FontSize", 48);
         phraseText.fontSize = fontSize;
 
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+        inputField.interactable = false; // wait for Start
+        phraseText.text = "Press Start to Begin!";
+        playAgainButton.gameObject.SetActive(false);
+    }
+
+    private void OnStartPressed()
+    {
+        startButton.gameObject.SetActive(false);
+        BeginGame();
+    }
+
+    private void BeginGame()
+    {
+        gameOver = false;
+        timerRunning = false;
+        correctKeystrokes = 0;
+        totalKeystrokes = 0;
+        mistakeCount = 0;
+        usedIndices.Clear();
+
+        playAgainButton.gameObject.SetActive(false);
+
+        inputField.text = "";
+        inputField.interactable = true;
+        phraseText.text = "";
+        lastInputLength = 0;
+        lastCorrectKeystrokes = 0;
+
+        LoadNextPhrase();
+        UpdateStats();
     }
 
     void LoadNextPhrase()
@@ -162,131 +200,129 @@ public class TypeRushManager : MonoBehaviour
         phraseText.text = currentPhrase;
         inputField.text = "";
         lastInputLength = 0;
+        lastCorrectKeystrokes = 0;
     }
 
-private int lastCorrectKeystrokes = 0;
-
-void OnInputChanged(string userInput)
-{
-    if (gameOver) return;
-
-    if (!timerRunning)
+    void OnInputChanged(string userInput)
     {
-        timerRunning = true;
-        startTime = Time.time;
-    }
+        if (gameOver || !inputField.interactable) return;
 
-    // Increment total keystrokes only if a new character was typed
-    if (userInput.Length > lastInputLength)
-    {
-        totalKeystrokes++;
-    }
-
-    // Calculate correct keystrokes for this input
-    int correctThisInput = 0;
-    for (int i = 0; i < userInput.Length; i++)
-    {
-        if (i < currentPhrase.Length && userInput[i] == currentPhrase[i])
-            correctThisInput++;
-    }
-
-    // Increment correctKeystrokes by the new correct characters typed
-    correctKeystrokes += Mathf.Max(0, correctThisInput - lastCorrectKeystrokes);
-    lastCorrectKeystrokes = correctThisInput;
-
-    // Check for mistakes beyond phrase length
-    if (userInput.Length > currentPhrase.Length)
-    {
-        AddMistake("<color=red>Too many characters!</color>");
-    }
-
-    // Highlight phrase text
-    int firstErrorIndex = -1;
-    for (int i = 0; i < userInput.Length; i++)
-    {
-        if (i >= currentPhrase.Length || userInput[i] != currentPhrase[i])
+        if (!timerRunning)
         {
-            firstErrorIndex = i;
-            break;
+            timerRunning = true;
+            startTime = Time.time;
         }
-    }
 
-    string coloredPhrase;
-    if (firstErrorIndex == -1)
-    {
-        coloredPhrase = $"<color=green>{currentPhrase.Substring(0, userInput.Length)}</color>" +
-                        currentPhrase.Substring(userInput.Length);
-    }
-    else
-    {
-        coloredPhrase = $"<color=green>{currentPhrase.Substring(0, firstErrorIndex)}</color>" +
-                        $"<color=red>{currentPhrase.Substring(firstErrorIndex, Mathf.Min(userInput.Length, currentPhrase.Length) - firstErrorIndex)}</color>" +
-                        currentPhrase.Substring(Mathf.Min(userInput.Length, currentPhrase.Length));
-        
-        // Count a mistake if user typed a wrong character
         if (userInput.Length > lastInputLength)
-            AddMistake("<color=red>Incorrect!</color>");
+            totalKeystrokes++;
+
+        int correctThisInput = 0;
+        for (int i = 0; i < userInput.Length; i++)
+        {
+            if (i < currentPhrase.Length && userInput[i] == currentPhrase[i])
+                correctThisInput++;
+        }
+
+        correctKeystrokes += Mathf.Max(0, correctThisInput - lastCorrectKeystrokes);
+        lastCorrectKeystrokes = correctThisInput;
+
+        // Mistakes
+        if (userInput.Length > currentPhrase.Length)
+            AddMistake();
+
+        // Highlight
+        int firstErrorIndex = -1;
+        for (int i = 0; i < userInput.Length; i++)
+        {
+            if (i >= currentPhrase.Length || userInput[i] != currentPhrase[i])
+            {
+                firstErrorIndex = i;
+                break;
+            }
+        }
+
+        string coloredPhrase;
+        if (firstErrorIndex == -1)
+        {
+            coloredPhrase = $"<color=green>{currentPhrase.Substring(0, userInput.Length)}</color>" +
+                            currentPhrase.Substring(userInput.Length);
+        }
+        else
+        {
+            coloredPhrase =
+                $"<color=green>{currentPhrase.Substring(0, firstErrorIndex)}</color>" +
+                $"<color=red>{currentPhrase.Substring(firstErrorIndex, Mathf.Min(userInput.Length, currentPhrase.Length) - firstErrorIndex)}</color>" +
+                currentPhrase.Substring(Mathf.Min(userInput.Length, currentPhrase.Length));
+
+            if (userInput.Length > lastInputLength)
+                AddMistake();
+        }
+
+        phraseText.text = coloredPhrase;
+
+        if (userInput == currentPhrase)
+        {
+            inputField.text = "";
+            lastCorrectKeystrokes = 0;
+            LoadNextPhrase();
+        }
+
+        lastInputLength = userInput.Length;
+        UpdateStats();
     }
 
-    phraseText.text = coloredPhrase;
-
-    // Check if the phrase is complete
-    if (userInput == currentPhrase)
-    {
-        inputField.text = "";
-        lastCorrectKeystrokes = 0; // reset for next phrase
-        LoadNextPhrase();
-    }
-
-    lastInputLength = userInput.Length;
+void AddMistake()
+{
+    mistakeCount++;
     UpdateStats();
+
+    if (mistakeCount >= mistakeLimit)
+    {
+        phraseText.text = "<color=red><b>GAME OVER</b></color>";
+        EndGame();
+        return;
+    }
 }
 
-    void AddMistake(string message)
-    {
-        mistakeCount++;
-        if (mistakeCount >= mistakeLimit)
-        {
-            EndGame();
-        }
-    }
 
     void UpdateStats()
-{
-    // Time in minutes since the game started
-    float elapsedMinutes = timerRunning ? (Time.time - startTime) / 60f : 0f;
+    {
+        float elapsedMinutes = timerRunning ? (Time.time - startTime) / 60f : 0f;
+        int wordsTyped = correctKeystrokes / 5;
+        int wpm = elapsedMinutes > 0 ? Mathf.RoundToInt(wordsTyped / elapsedMinutes) : 0;
+        float accuracy = totalKeystrokes > 0
+            ? (correctKeystrokes / (float)totalKeystrokes) * 100f
+            : 100f;
 
-    // Words typed so far (5 chars = 1 word)
-    int wordsTyped = correctKeystrokes / 5;
-    int wpm = elapsedMinutes > 0 ? Mathf.RoundToInt(wordsTyped / elapsedMinutes) : 0;
+        wpmText.text = $"WPM: {wpm}";
+        mistakesText.text = $"Mistakes: {mistakeCount}/{mistakeLimit}";
+        accuracyText.text = $"Accuracy: {accuracy:F1}%";
 
-    // Accuracy calculation
-    float accuracy = totalKeystrokes > 0 
-        ? (correctKeystrokes / (float)totalKeystrokes) * 100f 
-        : 100f; // default 100% if nothing typed yet
-
-    // Update UI texts
-    wpmText.text = $"WPM: {wpm}";
-    mistakesText.text = $"Mistakes: {mistakeCount}/{mistakeLimit}";
-    accuracyText.text = $"Accuracy: {accuracy:F1}%";
-
-    // Color feedback
-    if (accuracy >= 90f)
-        accuracyText.color = Color.green;   // great accuracy
-    else if (accuracy >= 70f)
-        accuracyText.color = Color.yellow;  // decent accuracy
-    else
-        accuracyText.color = Color.red;     // needs improvement
-}
-
-
+        if (accuracy >= 90f)
+            accuracyText.color = Color.green;
+        else if (accuracy >= 70f)
+            accuracyText.color = Color.yellow;
+        else
+            accuracyText.color = Color.red;
+    }
 
     void EndGame()
     {
         gameOver = true;
+        timerRunning = false;
         inputField.interactable = false;
+        playAgainButton.gameObject.SetActive(true);
+    }
 
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(true);
+    void RestartGame()
+    {
+        startButton.gameObject.SetActive(true);
+        playAgainButton.gameObject.SetActive(false);
+        phraseText.text = "Press Start to Begin!";
+        inputField.text = "";
+        inputField.interactable = false;
+        wpmText.text = "WPM: 0";
+        accuracyText.text = "Accuracy: 100%";
+        mistakesText.text = $"Mistakes: 0/{mistakeLimit}";
     }
 }
