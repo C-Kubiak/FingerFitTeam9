@@ -64,7 +64,11 @@ Notes
 * Tried fixing settings not persisting, issue still remains
 * Resolved scenes failing to load upon entering and exiting
 
+#### 10/13/25
 
+* Incorporated new asset package into Key Catch, Type Rush, and Main Menu
+* Created a settings scene to use rather than the panel on the main menu (not completed)
+* Testing a background in Type Rush/Main Menu
 
 
 
@@ -72,6 +76,6 @@ Notes
 
 ## \- Known Issues -
 
-* SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene
+* SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene (moving away from a settings panel, trying a whole scene for settings)
 * User Design Lacking in mini games
 * Lacking data storage
