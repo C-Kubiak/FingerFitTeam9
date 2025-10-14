@@ -71,6 +71,12 @@ Notes
 * Created a settings scene to use rather than the panel on the main menu (not completed)
 * Testing a background in Type Rush/Main Menu
 
+#### 10/14/25
+
+* Fixed Error: Sequence Spark shows <\ALPHA> in phrase box after making mistake
+* Added Timer Component to Type Rush
+
+
 
 
 
@@ -80,5 +86,4 @@ Notes
 * SettingsManager.cs does not work across scenes, and fails to work after exiting and rentering a scene (moving away from a settings panel, trying a whole scene for settings)
 * User Design Lacking in mini games
 * Lacking data storage
-* Sequence Spark shows <\ALPHA> in phrase box after making mistake
 * Type Rush doesn't have a GAME OVER popup when reaching mistake count

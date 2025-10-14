@@ -256,13 +256,17 @@ public class SequenceSparkManager : MonoBehaviour
     private IEnumerator ReflashSameSequence()
     {
         inputField.interactable = false;
+        phraseText.text = "";
+
         yield return new WaitForSeconds(0.6f);
         feedbackText.text = "<color=#FFD700>Watch closely…</color>";
         yield return StartCoroutine(FlashSequence());
         showingSequence = false;
-        phraseText.text = "<alpha=#60>Type the sequence…</alpha>";
         inputField.interactable = true;
         inputField.ActivateInputField();
+
+        if (feedbackText) feedbackText.text = $"<color=#87CEFA>Round {roundNumber}</color>";
+        phraseText.text = "Type the sequence\n\n" + BuildBulletPlaceholders("", sequence.Count);
     }
 
     private void UpdateStatsUI()

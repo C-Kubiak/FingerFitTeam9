@@ -11,6 +11,7 @@ public class TypeRushManager : MonoBehaviour
     public TMP_Text wpmText;
     public TMP_Text accuracyText;
     public TMP_Text mistakesText;
+    public TMP_Text timerText;
     public Button startButton;
     public Button playAgainButton;
 
@@ -129,6 +130,7 @@ public class TypeRushManager : MonoBehaviour
     private float startTime;
     private bool timerRunning = false;
     private bool gameOver = false;
+    private float elapsedTime = 0f;
 
     private int lastInputLength = 0;
     private int lastCorrectKeystrokes = 0;
@@ -153,6 +155,14 @@ public class TypeRushManager : MonoBehaviour
         phraseText.text = "Press Start to Begin!";
         playAgainButton.gameObject.SetActive(false);
     }
+    void Update()
+    {
+        if (timerRunning)
+        {
+            elapsedTime = Time.time - startTime;
+            UpdateTimerText(elapsedTime);
+        }
+    }
 
     private void OnStartPressed()
     {
@@ -163,7 +173,8 @@ public class TypeRushManager : MonoBehaviour
     private void BeginGame()
     {
         gameOver = false;
-        timerRunning = false;
+        timerRunning = true;
+        startTime = Time.time;
         correctKeystrokes = 0;
         totalKeystrokes = 0;
         mistakeCount = 0;
@@ -173,6 +184,7 @@ public class TypeRushManager : MonoBehaviour
 
         inputField.text = "";
         inputField.interactable = true;
+        inputField.ActivateInputField();
         phraseText.text = "";
         lastInputLength = 0;
         lastCorrectKeystrokes = 0;
@@ -206,12 +218,6 @@ public class TypeRushManager : MonoBehaviour
     void OnInputChanged(string userInput)
     {
         if (gameOver || !inputField.interactable) return;
-
-        if (!timerRunning)
-        {
-            timerRunning = true;
-            startTime = Time.time;
-        }
 
         if (userInput.Length > lastInputLength)
             totalKeystrokes++;
@@ -324,5 +330,16 @@ void AddMistake()
         wpmText.text = "WPM: 0";
         accuracyText.text = "Accuracy: 100%";
         mistakesText.text = $"Mistakes: 0/{mistakeLimit}";
+        elapsedTime = 0f;
+        UpdateTimerText(0f);
     }
+
+    private void UpdateTimerText(float t)
+    {
+        int minutes = (int)(t / 60f);
+        int seconds = (int)(t % 60f);
+        if (timerText != null)
+            timerText.text = $"Time: {minutes:00}:{seconds:00}";
+    }
+    
 }
