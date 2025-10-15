@@ -4,6 +4,9 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+
+
 
 public class SequenceSparkManager : MonoBehaviour
 {
@@ -126,7 +129,7 @@ public class SequenceSparkManager : MonoBehaviour
         if (string.IsNullOrEmpty(allowedCharacters))
             allowedCharacters = "abcdefghijklmnopqrstuvwxyz";
 
-        int idx = Random.Range(0, allowedCharacters.Length);
+        int idx = UnityEngine.Random.Range(0, allowedCharacters.Length);
         char c = allowedCharacters[idx];
         sequence.Add(forceLowercase ? char.ToLowerInvariant(c) : c);
     }
@@ -285,6 +288,28 @@ public class SequenceSparkManager : MonoBehaviour
 
         // only show Play Again button
         if (playAgainButton != null) playAgainButton.gameObject.SetActive(true);
+        // ✅ SAVE USER STATS
+        if (UserData.CurrentUser != null)
+        {
+            var u = UserData.CurrentUser;
+            u.totalGamesPlayed++;
+            u.sequenceSparkSessions++;
+            u.lastPlayed = DateTime.Now;
+
+            if (totalScore > u.bestSequenceScore) u.bestSequenceScore = totalScore;
+            if (longestStreak > u.bestLongestStreak) u.bestLongestStreak = longestStreak;
+
+            u.averageMistakesPerGame =
+                (u.averageMistakesPerGame + mistakeCount) / 2f;
+
+            UserDataManager.SaveUserData(u);
+            Debug.Log($"✅ SequenceSpark data saved for {u.userName}");
+        }
+        else
+        {
+            Debug.LogWarning("⚠ No logged-in user found. Stats not saved.");
+        }
+
     }
 
     public void Restart()

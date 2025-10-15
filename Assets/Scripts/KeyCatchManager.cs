@@ -1,6 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+
 
 public class KeyCatchManager : MonoBehaviour
 {
@@ -59,18 +61,42 @@ void Start()
         timeRemaining -= Time.deltaTime;
         timerText.text = "Time: " + Mathf.CeilToInt(timeRemaining);
 
-if (timeRemaining <= 0f)
-{
-    gameActive = false;
-    keyPromptText.text = "";
-    reactionText.text = $"Final Avg Reaction: {(successfulReactions > 0 ? (totalReactionTime / successfulReactions).ToString("F2") : "N/A")}s";
+        if (timeRemaining <= 0f)
+        {
+            gameActive = false;
+            keyPromptText.text = "";
+            reactionText.text = $"Final Avg Reaction: {(successfulReactions > 0 ? (totalReactionTime / successfulReactions).ToString("F2") : "N/A")}s";
 
-    playAgainButton.gameObject.SetActive(true);
-}
+            playAgainButton.gameObject.SetActive(true);
+
+            // ✅ SAVE USER STATS
+            if (UserData.CurrentUser != null)
+            {
+                var u = UserData.CurrentUser;
+                u.totalGamesPlayed++;
+                u.keyCatchSessions++;
+                u.lastPlayed = DateTime.Now;
+
+                if (score > u.bestKeyCatchScore)
+                    u.bestKeyCatchScore = score;
+
+                float avgReaction = successfulReactions > 0 ? totalReactionTime / successfulReactions : 9999f;
+                if (avgReaction < u.bestReactionTime)
+                    u.bestReactionTime = avgReaction;
+                u.averageReactionTime = (u.averageReactionTime + avgReaction) / 2f;
+
+                UserDataManager.SaveUserData(u);
+                Debug.Log($"✅ KeyCatch data saved for {u.userName}");
+            }
+            else
+            {
+                Debug.LogWarning("⚠ No logged-in user found. Stats not saved.");
+            }
+        }
 
     }
 
-void StartGame()
+    void StartGame()
 {
     score = 0;
     totalReactionTime = 0f;
@@ -101,7 +127,7 @@ void StartGame()
         // keep picking until it's different from last key
         do
         {
-            int randomIndex = Random.Range(0, possibleKeys.Length);
+            int randomIndex = UnityEngine.Random.Range(0, possibleKeys.Length);
             newKey = possibleKeys[randomIndex];
         }
         while (newKey == lastKey);

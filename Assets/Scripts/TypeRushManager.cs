@@ -1,7 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
+
 
 public class TypeRushManager : MonoBehaviour
 {
@@ -203,7 +205,7 @@ public class TypeRushManager : MonoBehaviour
         int randomIndex;
         do
         {
-            randomIndex = Random.Range(0, phrases.Count);
+            randomIndex = UnityEngine.Random.Range(0, phrases.Count);
         } while (usedIndices.Contains(randomIndex));
 
         usedIndices.Add(randomIndex);
@@ -318,7 +320,40 @@ void AddMistake()
         timerRunning = false;
         inputField.interactable = false;
         playAgainButton.gameObject.SetActive(true);
+
+        // ✅ SAVE USER STATS
+        if (UserData.CurrentUser != null)
+        {
+            float elapsedMinutes = (Time.time - startTime) / 60f;
+            int wordsTyped = correctKeystrokes / 5;
+            float wpm = elapsedMinutes > 0 ? wordsTyped / elapsedMinutes : 0f;
+            float accuracy = totalKeystrokes > 0
+                ? (correctKeystrokes / (float)totalKeystrokes) * 100f
+                : 100f;
+
+            var u = UserData.CurrentUser;
+            u.totalGamesPlayed++;
+            u.typeRushSessions++;
+            u.lastPlayed = DateTime.Now;
+
+            if (wpm > u.bestWPM) u.bestWPM = wpm;
+            u.averageWPM = (u.averageWPM + wpm) / 2f;
+
+            if (accuracy > u.bestAccuracy) u.bestAccuracy = accuracy;
+            u.averageAccuracy = (u.averageAccuracy + accuracy) / 2f;
+
+            u.totalKeystrokes += totalKeystrokes;
+            u.totalMistakes += mistakeCount;
+
+            UserDataManager.SaveUserData(u);
+            Debug.Log($"✅ TypeRush data saved for {u.userName}");
+        }
+        else
+        {
+            Debug.LogWarning("⚠ No logged-in user found. Stats not saved.");
+        }
     }
+
 
     void RestartGame()
     {
